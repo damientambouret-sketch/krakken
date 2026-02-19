@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Kraken Monitor Damien</title>
+<style>
+body {
+  margin: 0;
+  background: #0a0a0a;
+  color: white;
+  font-family: "Arial Black", sans-serif;
+  width: 320px;
+  height: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.section {
+  text-align: center;
+}
+
+.title {
+  font-size: 18px;
+  opacity: 0.7;
+}
+
+.value {
+  font-size: 52px;
+  font-weight: bold;
+  text-shadow: 2px 2px 5px #ff0000;
+}
+
+.model {
+  font-size: 14px;
+  opacity: 0.6;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  display: block;
+  margin: 0 auto 5px;
+}
+
+.cpu .value { color: #ff4d4d; } /* Rouge gamer */
+.gpu .value { color: #4d94ff; } /* Bleu gamer */
+</style>
+</head>
+<body>
+
+<!-- CPU Section -->
+<div class="section cpu">
+  <img src="https://img.icons8.com/ios-filled/50/ffffff/cpu.png" class="logo" alt="CPU Logo">
+  <div class="title">CPU</div>
+  <div class="model">i7-10700K</div>
+  <div class="value" id="cpuTemp">-- °C</div>
+  <div class="value" id="cpuLoad">-- %</div>
+</div>
+
+<!-- GPU Section -->
+<div class="section gpu">
+  <img src="https://img.icons8.com/ios-filled/50/ffffff/graphics-card.png" class="logo" alt="GPU Logo">
+  <div class="title">GPU</div>
+  <div class="model">RTX 4070 Ti Super</div>
+  <div class="value" id="gpuTemp">-- °C</div>
+  <div class="value" id="gpuLoad">-- %</div>
+</div>
+
+<script>
+/* =================================================
+   Kraken lit directement les infos du PC via CAM
+   Les variables CAM API injectent CPU/GPU temp & usage
+   ================================================= */
+
+function updateValues() {
+    try {
+        // Exemple de variables injectées par NZXT CAM Web Integration
+        const cpuTemp = window.CAM?.CPU?.Temperature ?? "--";
+        const cpuLoad = window.CAM?.CPU?.Usage ?? "--";
+        const gpuTemp = window.CAM?.GPU?.Temperature ?? "--";
+        const gpuLoad = window.CAM?.GPU?.Usage ?? "--";
+
+        document.getElementById("cpuTemp").innerText = cpuTemp + " °C";
+        document.getElementById("cpuLoad").innerText = cpuLoad + " %";
+        document.getElementById("gpuTemp").innerText = gpuTemp + " °C";
+        document.getElementById("gpuLoad").innerText = gpuLoad + " %";
+    } catch(e) {
+        console.log("Erreur CAM API ou valeurs non disponibles");
+    }
+}
+
+// Mise à jour toutes les 2 secondes
+setInterval(updateValues, 2000);
+</script>
+
+</body>
+</html>
